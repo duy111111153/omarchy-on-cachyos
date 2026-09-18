@@ -2,12 +2,12 @@
 
 # Target destination (relative to this script's location)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TARGET_DIR="$SCRIPT_DIR/../../omarchy"
+TARGET_DIR="$SCRIPT_DIR/../omarchy"
 REPO_URL="https://github.com/basecamp/omarchy"
 
 # Fetch available stable version tags from the remote repository cleanly
 echo "Fetching available stable releases from GitHub..."
-RELEASES=($(git ls-remote --tags --refs $REPO_URL 2>/dev/null | awk -F/ '{print $3}' | sort -rV | head -n 5))
+RELEASES=($(git ls-remote --tags --refs $REPO_URL 2>/dev/null | awk -F/ '{print $3}' | sort -rV | grep "^v3\." | head -n 5))
 
 echo "-----------------------------------------------"
 echo "Select the Omarchy version you want to install:"
@@ -34,7 +34,7 @@ fi
 # Ensure target directory is clean before git cloning to prevent fatal conflicts
 if [ -d "$TARGET_DIR" ]; then
     echo ""
-    echo "⚠️  Warning: An existing installation directory was found at $TARGET_DIR"
+    echo "??  Warning: An existing installation directory was found at $TARGET_DIR"
     read -r -p "Would you like to delete it and proceed with a clean install? [y/N]: " CONFIRM
     
     if [[ "${CONFIRM,,}" =~ ^(y|yes)$ ]]; then
